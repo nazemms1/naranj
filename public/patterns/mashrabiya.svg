@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="148" height="148" viewBox="0 0 148 148">
+  <g fill="none" stroke="#cf9717" stroke-width="1" opacity="0.55">
+    <!-- interlaced lattice, as on the restaurant's wooden screens -->
+    <path d="M0 37 L37 0 M37 74 L74 37 M74 111 L111 74 M111 148 L148 111"/>
+    <path d="M0 111 L111 0 M37 148 L148 37"/>
+    <path d="M0 37 L111 148 M37 0 L148 111"/>
+    <path d="M0 111 L37 148 M74 37 L111 0 M74 111 L37 74 M111 74 L148 37"/>
+    <circle cx="74" cy="74" r="13"/>
+    <circle cx="0" cy="0" r="13"/><circle cx="148" cy="0" r="13"/>
+    <circle cx="0" cy="148" r="13"/><circle cx="148" cy="148" r="13"/>
+  </g>
+</svg>

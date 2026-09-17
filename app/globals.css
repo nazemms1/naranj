@@ -1,26 +1,410 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
+/* ==========================================================================
+   NARANJ DAMASCUS — Design System
+
+   The palette is lifted from the restaurant's own identity as Gemini Group
+   uses it: the brass of the illuminated facade sign (#cf9717), the charcoal of
+   the group's brand shell (#222831), and the ivory of Damascene stonework. The
+   ablaq motif — the banded stone on the facade — is reproduced as a real
+   design element rather than generic ornament.
+
+   THEMING
+   Components never name a raw colour. They use the palette scale (ink-*,
+   brass-*, stone-*, ivory-*), and each step of that scale resolves to a CSS
+   variable that is redefined for the light theme below. Flipping the theme
+   therefore repaints the whole site without touching a single component: the
+   scale keeps its meaning (ink-900 is always "the page", ivory-100 is always
+   "the strongest text"), only the value changes.
+   ========================================================================== */
+
+@theme {
+  /* Surfaces, darkest to lightest in dark mode */
+  --color-ink-950: var(--c-ink-950);
+  --color-ink-900: var(--c-ink-900);
+  --color-ink-850: var(--c-ink-850);
+  --color-ink-800: var(--c-ink-800);
+  --color-ink-700: var(--c-ink-700);
+  --color-ink-600: var(--c-ink-600);
+  --color-ink-500: var(--c-ink-500);
+
+  /* Brass, lightest to darkest in dark mode */
+  --color-brass-100: var(--c-brass-100);
+  --color-brass-200: var(--c-brass-200);
+  --color-brass-300: var(--c-brass-300);
+  --color-brass-400: var(--c-brass-400);
+  --color-brass-500: var(--c-brass-500);
+  --color-brass-600: var(--c-brass-600);
+  --color-brass-700: var(--c-brass-700);
+  --color-brass-800: var(--c-brass-800);
+
+  /* The bitter orange the house is named for */
+  --color-naranj-300: var(--c-naranj-300);
+  --color-naranj-400: var(--c-naranj-400);
+  --color-naranj-500: var(--c-naranj-500);
+
+  /* Text: ivory is the strongest, stone the quietest */
+  --color-ivory-50: var(--c-ivory-50);
+  --color-ivory-100: var(--c-ivory-100);
+  --color-ivory-200: var(--c-ivory-200);
+  --color-stone-300: var(--c-stone-300);
+  --color-stone-400: var(--c-stone-400);
+  --color-stone-500: var(--c-stone-500);
+  --color-stone-600: var(--c-stone-600);
+
+  /* Typography: the four faces the brand already uses */
+  --font-display: var(--font-playfair), "Kufam", ui-serif, Georgia, serif;
+  --font-display-ar: var(--font-kufam), "Playfair Display", ui-serif, serif;
+  --font-body: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-body-ar: var(--font-tajawal), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-luxe: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-silk: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --shadow-luxe: var(--c-shadow-luxe);
+  --shadow-brass: var(--c-shadow-brass);
+
+  --spacing-header: 5.25rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* -------------------------------------------------------------------------- */
+/*                                   Themes                                   */
+/* -------------------------------------------------------------------------- */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --c-ink-950: #0e1116;
+  --c-ink-900: #151920;
+  --c-ink-850: #1b2028;
+  --c-ink-800: #222831;
+  --c-ink-700: #2c333e;
+  --c-ink-600: #39424f;
+  --c-ink-500: #4b5666;
+
+  --c-brass-100: #fbf1d8;
+  --c-brass-200: #f4e0aa;
+  --c-brass-300: #e8c876;
+  --c-brass-400: #dcb245;
+  --c-brass-500: #cf9717;
+  --c-brass-600: #b48212;
+  --c-brass-700: #8a630e;
+  --c-brass-800: #5e430a;
+
+  --c-naranj-300: #f6b979;
+  --c-naranj-400: #ef9c49;
+  --c-naranj-500: #e07f24;
+
+  --c-ivory-50: #fdfcf9;
+  --c-ivory-100: #f6f3ec;
+  --c-ivory-200: #e6e2d8;
+  --c-stone-300: #cfc9bd;
+  --c-stone-400: #a8a296;
+  --c-stone-500: #918a7e;
+  --c-stone-600: #8f877a;
+
+  --c-shadow-luxe: 0 28px 70px -24px rgb(0 0 0 / 0.8);
+  --c-shadow-brass: 0 0 0 1px rgb(207 151 23 / 0.3), 0 20px 50px -24px rgb(207 151 23 / 0.45);
+
+  /* Photographs sit in a dark room: let them stay rich. */
+  --c-photo-filter: none;
+  --c-grain-opacity: 0.04;
+  --c-scrim: 14 17 22;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/**
+ * Light theme: Damascene limestone rather than plain white. The scale keeps
+ * its direction — ink-950 stays the "deepest" surface, it is simply the
+ * warmest paper instead of the darkest charcoal — and the brass ramp inverts
+ * so that brass-100, used as bright text on dark, becomes deep bronze on
+ * light and keeps its contrast.
+ */
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Surfaces: quarried limestone, not paper. The alternating rhythm of the
+     dark theme is preserved — ink-950 stays the deeper of the two section
+     tones, it is simply the more saturated stone rather than the blacker. */
+  --c-ink-950: #ddd4c2;
+  --c-ink-900: #eae4d8;
+  --c-ink-850: #f6f2e9;
+  --c-ink-800: #e0d8c8;
+  --c-ink-700: #d2c8b4;
+  --c-ink-600: #bdb19a;
+  --c-ink-500: #a1937b;
+
+  /* Brass on stone. The ramp inverts (brass-100 is bright on charcoal, deep
+     bronze here) and is compressed, because every step up to 600 is used as
+     text and has to clear 4.5:1 against both section tones. Verified by
+     scripts/check-contrast.js. */
+  --c-brass-100: #2e1f04;
+  --c-brass-200: #3b2705;
+  --c-brass-300: #492f06;
+  --c-brass-400: #583a07;
+  --c-brass-500: #684408;
+  --c-brass-600: #784e09;
+  --c-brass-700: #8a5b0b;
+  --c-brass-800: #9d680d;
+
+  --c-naranj-300: #8f4409;
+  --c-naranj-400: #a9530d;
+  --c-naranj-500: #c06413;
+
+  /* Text: warm espresso rather than cold charcoal, so it belongs to the stone. */
+  --c-ivory-50: #241c10;
+  --c-ivory-100: #2f2618;
+  --c-ivory-200: #443a2a;
+  --c-stone-300: #3f372a;
+  --c-stone-400: #4e4535;
+  --c-stone-500: #5c5241;
+  --c-stone-600: #635945;
+
+  --c-shadow-luxe: 0 24px 58px -26px rgb(70 55 25 / 0.3);
+  --c-shadow-brass: 0 0 0 1px rgb(169 118 15 / 0.26), 0 18px 44px -26px rgb(169 118 15 / 0.4);
+
+  /* The photography is mostly evening work; lift it a touch on stone. */
+  --c-photo-filter: saturate(1.05) brightness(1.04) contrast(0.98);
+  --c-grain-opacity: 0.025;
+  --c-scrim: 234 228 216;
+}
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  * {
+    border-color: color-mix(in oklab, var(--color-brass-500) 16%, transparent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--spacing-header);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-ink-900);
+    color: var(--color-ivory-200);
+    font-family: var(--font-body);
+    font-feature-settings: "liga" 1, "kern" 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    transition: background-color 0.5s var(--ease-luxe), color 0.5s var(--ease-luxe);
+  }
+
+  html[lang="ar"] body {
+    font-family: var(--font-body-ar);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.012em;
+  }
+
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3,
+  html[lang="ar"] h4 {
+    font-family: var(--font-display-ar);
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.5;
+  }
+
+  ::selection {
+    background: var(--color-brass-500);
+    color: var(--color-ink-950);
+  }
+
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-track { background: var(--color-ink-950); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--color-brass-600), var(--color-brass-800));
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-brass-500); }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brass-500);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  img { filter: var(--c-photo-filter); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+@layer utilities {
+  /* Brass foil, for numerals and key display words */
+  .text-foil {
+    background: linear-gradient(
+      100deg,
+      var(--color-brass-700) 0%,
+      var(--color-brass-500) 20%,
+      var(--color-brass-300) 42%,
+      var(--color-brass-400) 58%,
+      var(--color-brass-600) 76%,
+      var(--color-brass-300) 100%
+    );
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: foil-drift 10s linear infinite;
+  }
+
+  @keyframes foil-drift {
+    to { background-position: 220% center; }
+  }
+
+  /* ---- Ablaq ----------------------------------------------------------
+     The facade's alternating stone courses — structural on the building,
+     so used here as a rule and an edge, never as wallpaper. */
+  .ablaq-rule {
+    height: 6px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--color-ink-800) 0 22px,
+      var(--color-stone-300) 22px 44px,
+      var(--color-brass-600) 44px 50px
+    );
+    opacity: 0.5;
+  }
+
+  .ablaq-edge {
+    background: repeating-linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-ink-800) 92%, transparent) 0 14px,
+      color-mix(in oklab, var(--color-stone-300) 40%, transparent) 14px 28px
+    );
+  }
+
+  .rule-brass {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      color-mix(in oklab, var(--color-brass-500) 60%, transparent),
+      transparent
+    );
+  }
+
+  .glass-panel {
+    /* Stone is far less forgiving than charcoal: a pane you can see through
+       reads as unfinished, so the light theme sits closer to opaque. */
+    background: color-mix(in oklab, var(--color-ink-900) 80%, transparent);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+  }
+
+  [data-theme="light"] .glass-panel {
+    background: color-mix(in oklab, var(--color-ink-900) 94%, transparent);
+  }
+
+  /* The mashrabiya lattice from the restaurant's screens and ceilings */
+  .bg-mashrabiya {
+    background-image: url("/patterns/mashrabiya.svg");
+    background-size: 148px 148px;
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--c-grain-opacity);
+    background-image: url("/patterns/grain.svg");
+    mix-blend-mode: overlay;
+  }
+
+  /**
+   * Scrim over photography. It tracks the theme, so a photograph is veiled in
+   * charcoal at night and in limestone by day — text contrast holds either
+   * way, because the text colour flips with it.
+   */
+  .scrim-b {
+    background: linear-gradient(
+      to bottom,
+      rgb(var(--c-scrim) / 0.7) 0%,
+      rgb(var(--c-scrim) / 0.28) 40%,
+      rgb(var(--c-scrim) / 0.5) 75%,
+      rgb(var(--c-scrim) / 1) 100%
+    );
+  }
+  .scrim-inline {
+    background: linear-gradient(
+      to right,
+      rgb(var(--c-scrim) / 0.8) 0%,
+      rgb(var(--c-scrim) / 0.5) 30%,
+      rgb(var(--c-scrim) / 0.15) 65%,
+      transparent 100%
+    );
+  }
+  /* Mirrored for Arabic, where the copy sits on the right. */
+  [dir="rtl"] .scrim-inline {
+    background: linear-gradient(
+      to left,
+      rgb(var(--c-scrim) / 0.8) 0%,
+      rgb(var(--c-scrim) / 0.5) 30%,
+      rgb(var(--c-scrim) / 0.15) 65%,
+      transparent 100%
+    );
+  }
+
+  .scrim-solid { background: rgb(var(--c-scrim) / 0.9); }
+  .scrim-top {
+    background: linear-gradient(
+      to top,
+      rgb(var(--c-scrim) / 1) 0%,
+      rgb(var(--c-scrim) / 0.82) 35%,
+      rgb(var(--c-scrim) / 0.6) 70%,
+      rgb(var(--c-scrim) / 0.45) 100%
+    );
+  }
+
+  .shadow-luxe { box-shadow: var(--shadow-luxe); }
+  .shadow-brass { box-shadow: var(--shadow-brass); }
+
+  .pt-header { padding-top: var(--spacing-header); }
+
+  [dir="rtl"] .flip-rtl { transform: scaleX(-1); }
+
+  .container-luxe {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 84rem;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) { .container-luxe { padding-inline: 2rem; } }
+  @media (min-width: 1280px) { .container-luxe { padding-inline: 3.5rem; } }
+
+  .section-y { padding-block: 5.5rem; }
+  @media (min-width: 768px) { .section-y { padding-block: 7.5rem; } }
+  @media (min-width: 1280px) { .section-y { padding-block: 9.5rem; } }
+
+  .tracking-luxe { letter-spacing: 0.26em; }
+  html[lang="ar"] .tracking-luxe { letter-spacing: 0.05em; }
+
+  .arch-top {
+    border-start-start-radius: 50% 22%;
+    border-start-end-radius: 50% 22%;
+  }
 }
