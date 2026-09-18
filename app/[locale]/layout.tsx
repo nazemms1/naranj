@@ -77,7 +77,9 @@ export async function generateMetadata({
       template: `%s — ${restaurant.name[locale]}`,
     },
     applicationName: restaurant.legalName[locale],
-    icons: { icon: "/favicon.ico", apple: "/naranj-wordmark.png" },
+    // No `icons` entry: `app/icon.png` and `app/apple-icon.png` are picked up
+    // by Next's file convention and linked with a content hash. Both are built
+    // from the wordmark by `scripts/make-icons.js`.
     manifest: "/manifest.webmanifest",
     keywords:
       locale === "ar"

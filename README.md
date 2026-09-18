@@ -28,6 +28,37 @@ node scripts/check-contrast.js    # تدقيق التباين في الوضعي�
 
 ---
 
+## النشر · Deploying to Cloudflare
+
+الموقع ينشر على **Cloudflare Workers** عبر
+[`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare)، وهو المسار
+الرسمي لـ Next.js على Cloudflare اليوم (Pages صار legacy للـ Next). هذا
+يبقي كل ما يولّده `next build` شغّالاً: `app/api/reservations`، صورة
+opengraph الديناميكية، `sitemap.ts` و`robots.ts`، و`proxy.ts` الذي يوجّه
+الزائر إلى لغته.
+
+```bash
+npm run cf:build      # next build ثم تحويله إلى Worker في .open-next/
+npm run cf:preview    # تشغيله محلياً داخل workerd — هذا ما سيعمل فعلاً
+npm run cf:deploy     # نشره (يتطلّب wrangler login مرّة واحدة)
+```
+
+الإعداد في [wrangler.jsonc](wrangler.jsonc) و[open-next.config.ts](open-next.config.ts).
+مخرجات البناء (`.open-next/`) و`.wrangler/` مستثناة من git.
+
+**تنبيهان معروفان.** أوّلهما أنّ OpenNext يحذّر من ويندوز ويوصي بـ WSL —
+البناء ينجح هنا، لكن إن ظهر خلل غريب في وقت التشغيل فجرّب WSL. وثانيهما أنّ
+`proxy.ts` يعمل على Node runtime، ودعمه في Cloudflare تجريبي؛ الملف لا
+يستعمل أي واجهة خاصة بـ Node فهو يعمل، لكن التحذير يبقى في مخرجات البناء.
+
+**الصور.** لا يوجد sharp خلف `/_next/image` على Workers، لذا
+`images.unoptimized` مفعّل في [next.config.ts](next.config.ts). الصور
+المشحونة أصلاً هي مشتقّات `scripts/optimize-images.js` ولا تتجاوز واحدتها
+٤٠٠ كيلوبايت، فتُقدَّم كما هي من حافة Cloudflare بينما يظلّ `next/image`
+مسؤولاً عن النسب والتحميل الكسول.
+
+---
+
 ## التقنيات · Stack
 
 | | |
@@ -68,7 +99,14 @@ node scripts/crop-collage.js     # يقسم كولاج نارنج إلى ٤ صو
 node scripts/optimize-images.js  # يضبط المقاسات ويضغط
 node scripts/prepare-brands.js   # يقصّ صور مطاعم المجموعة
 node scripts/extract-logo.js     # يستخرج الشعار الرسمي (نسختان: عاجية وداكنة)
+node scripts/make-icons.js       # يقصّ زهرة النارنج من الشعار ويبني أيقونات الموقع
 ```
+
+`make-icons.js` يكتب `app/icon.png` و`app/apple-icon.png` و`app/favicon.ico`
+(يلتقطها Next عبر اصطلاح الملفات) و`public/icon-192.png` و`public/icon-512.png`
+للـ manifest.
+الأيقونة هي زهرة النارنج وحدها لأن الشعار الكامل — الخطّ العربي والزهرة
+والحروف اللاتينية — يصير غير مقروء تحت ٦٤ بكسل.
 
 الشعار في `public/naranj-wordmark.png` هو شعار المطعم الرسمي نفسه، مستخرج من
 علامته المائية على صورة الصالة، وليس رسماً مقلّداً. تُولَّد منه نسخة داكنة
