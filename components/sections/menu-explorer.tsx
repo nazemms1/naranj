@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, X } from "lucide-react";
 
@@ -40,7 +41,7 @@ export function MenuExplorer({ locale, t }: { locale: Locale; t: Dictionary }) {
         item.name.en,
         item.romanized,
         item.description[locale],
-        ...item.ingredients[locale],
+        ...(item.ingredients?.[locale] ?? []),
       ]
         .join(" ")
         .toLowerCase();
@@ -58,6 +59,7 @@ export function MenuExplorer({ locale, t }: { locale: Locale; t: Dictionary }) {
   }, [results]);
 
   const hasFilters = filter !== "all" || normalised.length > 0;
+  const hasPrices = menuItems.some((item) => item.priceUSD !== undefined);
 
   return (
     <div className="flex flex-col gap-10">
@@ -85,11 +87,14 @@ export function MenuExplorer({ locale, t }: { locale: Locale; t: Dictionary }) {
               )}
             </div>
 
-            <CurrencyToggle
-              currency={currency}
-              onChange={setCurrency}
-              label={t.menu.currencyLabel}
-            />
+            {/* Only worth showing once real prices exist to convert. */}
+            {hasPrices && (
+              <CurrencyToggle
+                currency={currency}
+                onChange={setCurrency}
+                label={t.menu.currencyLabel}
+              />
+            )}
           </div>
 
           <div
@@ -174,9 +179,18 @@ export function MenuExplorer({ locale, t }: { locale: Locale; t: Dictionary }) {
               </section>
             ))}
 
-            <p className="text-center text-[0.82rem] text-stone-600">
-              {t.menu.priceNote}
-            </p>
+            {/* Says plainly which parts of the printed menu are here and which
+              * are still coming, rather than letting the page imply it is whole. */}
+            <aside className="mx-auto flex max-w-2xl flex-col items-center gap-3 rounded-2xl border border-brass-500/20 bg-ink-850/60 px-7 py-8 text-center">
+              <Ornament />
+              <h2 className="text-xl text-ivory-200">{t.menu.pendingTitle}</h2>
+              <p className="text-[0.92rem] leading-[1.9] text-stone-500">
+                {t.menu.pendingBody}
+              </p>
+              <Button asChild variant="outline" size="sm" className="mt-1">
+                <Link href={`/${locale}/contact`}>{t.nav.contact}</Link>
+              </Button>
+            </aside>
           </motion.div>
         )}
       </AnimatePresence>

@@ -57,6 +57,8 @@ const ar = {
     ctaReserve: "احجز طاولتك",
     ctaMenu: "تصفّح القائمة",
     scrollHint: "تابع النزول",
+    imageAlt: "صحن الدار ليلاً تحت السقف الزجاجي، بالحجر الأبلق والمشربية والجهنمية",
+    imageCaption: "صحن الدار · دمشق",
   },
 
   stats: {
@@ -99,20 +101,25 @@ const ar = {
   menu: {
     eyebrow: "المائدة",
     title: "قائمة الطعام",
-    lede: "مقبلات باردة وساخنة، مشاوٍ على فحم حطب الزيتون، أطباق تراثية تُطبخ ببطء، وحلويات شامية تُحضّر في الدار.",
-    searchPlaceholder: "ابحث عن طبق… (كرز، فتّة، كبة)",
+    lede: "شوربات وسلطات من قائمة نارنج المطبوعة، والأطباق التي يُعرف بها البيت.",
+    searchPlaceholder: "ابحث عن طبق… (فتوش، تبولة، كرز)",
     filterAll: "الكل",
     signatureBadge: "طبق البيت",
     chefBadge: "اختيار الشيف",
     veganBadge: "نباتي",
     spicyBadge: "حار",
+    seasonalBadge: "موسمي",
     currencyLabel: "العملة",
     dishDetails: "تفاصيل الطبق",
     ingredients: "المكوّنات",
     allergens: "تنبيه تحسّس",
     pairing: "يُقدَّم مع",
     noResultsHint: "جرّب كلمة أخرى أو ألغِ التصفية.",
-    priceNote: "الأسعار تشمل الضريبة. قد تتغيّر حسب توفّر المواسم.",
+    priceOnRequest: "السعر عند الطلب",
+    priceNote: "للاستفسار عن الأسعار، اتصل بنا.",
+    pendingTitle: "بقيّة القائمة",
+    pendingBody:
+      "ما تراه هنا منقول عن قائمة نارنج المطبوعة. بقيّة الأقسام — المقبلات والمشاوي والأطباق الرئيسية والمشروبات — تُضاف فور ورودها من المطعم. للاستفسار عن طبقٍ بعينه أو عن الأسعار، اتصل بنا.",
     downloadPdf: "تحميل القائمة PDF",
   },
 
@@ -263,6 +270,16 @@ const ar = {
     note: "جميع هذه المطاعم من تطوير وإدارة",
   },
 
+  branches: {
+    eyebrow: "أين نحن",
+    title: "نارنج خارج دمشق",
+    lede: "بدأت الحكاية في القيمرية، ثم حملها الامتياز إلى مدنٍ أخرى. هذه المدن التي يذكرها المطعم نفسه.",
+    flagship: "البيت الأول",
+    since: "منذ",
+    footnote:
+      "المدن المذكورة هنا من حساب نارنج الرسمي ومن موقع مجموعة جيميني. إن كان للمطعم فرعٌ غير مذكور، فهو ينتظر تأكيد الإدارة.",
+  },
+
   newsletter: {
     title: "أخبار الدار",
     lede: "قوائم موسمية، أمسيات خاصة، ومواعيد رمضان — رسالة واحدة في الشهر.",
@@ -280,6 +297,7 @@ const ar = {
     follow: "تابعنا",
     rights: "جميع الحقوق محفوظة",
     partOf: "جزء من",
+    developedBy: "تطوير",
     legal: "الخصوصية والشروط",
   },
 
@@ -366,6 +384,8 @@ const en: Dictionary = {
     ctaReserve: "Reserve a table",
     ctaMenu: "View the menu",
     scrollHint: "Scroll",
+    imageAlt: "The courtyard at night under its glass roof — ablaq stone, carved mashrabiya and bougainvillea",
+    imageCaption: "The courtyard · Damascus",
   },
 
   stats: {
@@ -408,20 +428,25 @@ const en: Dictionary = {
   menu: {
     eyebrow: "The Table",
     title: "Our Menu",
-    lede: "Cold and hot mezze, grills over olive-wood charcoal, slow-cooked heritage dishes, and Damascene sweets made in house.",
-    searchPlaceholder: "Search a dish… (cherry, fatteh, kibbeh)",
+    lede: "Soups and salads from Naranj's printed menu, and the plates the house is known for.",
+    searchPlaceholder: "Search a dish… (fatoush, tabouleh, cherry)",
     filterAll: "All",
     signatureBadge: "House dish",
     chefBadge: "Chef's pick",
     veganBadge: "Vegetarian",
     spicyBadge: "Spicy",
+    seasonalBadge: "Seasonal",
     currencyLabel: "Currency",
     dishDetails: "Dish details",
     ingredients: "Ingredients",
     allergens: "Allergen note",
     pairing: "Served with",
     noResultsHint: "Try another word, or clear the filters.",
-    priceNote: "Prices include tax and may shift with seasonal availability.",
+    priceOnRequest: "Price on request",
+    priceNote: "For prices, please call us.",
+    pendingTitle: "The rest of the menu",
+    pendingBody:
+      "What you see here is transcribed from Naranj's printed menu. The remaining sections — mezze, grills, main dishes and drinks — will be added as soon as the restaurant supplies them. For a particular dish, or for prices, please call us.",
     downloadPdf: "Download menu PDF",
   },
 
@@ -572,6 +597,16 @@ const en: Dictionary = {
     note: "All of these are developed and operated by",
   },
 
+  branches: {
+    eyebrow: "Where we are",
+    title: "Naranj beyond Damascus",
+    lede: "The story began in Al-Qaymariya, and franchising carried it to other cities. These are the ones the restaurant itself names.",
+    flagship: "The original house",
+    since: "Since",
+    footnote:
+      "The cities here come from Naranj's own account and from the Gemini Group site. If the restaurant runs a branch not listed, it is awaiting confirmation from management.",
+  },
+
   newsletter: {
     title: "News from the house",
     lede: "Seasonal menus, special evenings, and Ramadan hours — one letter a month.",
@@ -589,6 +624,7 @@ const en: Dictionary = {
     follow: "Follow",
     rights: "All rights reserved",
     partOf: "Part of",
+    developedBy: "Developed by",
     legal: "Privacy & terms",
   },
 

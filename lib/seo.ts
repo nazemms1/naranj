@@ -146,11 +146,16 @@ export function menuJsonLd(locale: Locale) {
           "@type": "MenuItem",
           name: item.name[locale],
           description: item.description[locale],
-          offers: {
-            "@type": "Offer",
-            price: item.priceUSD,
-            priceCurrency: "USD",
-          },
+          /* Omitted entirely while the operator's price list is outstanding —
+           * a structured-data price must be a real one. */
+          offers:
+            item.priceUSD === undefined
+              ? undefined
+              : {
+                  "@type": "Offer",
+                  price: item.priceUSD,
+                  priceCurrency: "USD",
+                },
           suitableForDiet: item.vegetarian
             ? "https://schema.org/VegetarianDiet"
             : undefined,

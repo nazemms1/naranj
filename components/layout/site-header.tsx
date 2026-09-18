@@ -8,7 +8,6 @@ import { Menu, Phone, X } from "lucide-react";
 
 import { Logo } from "./logo";
 import { LocaleSwitcher } from "./locale-switcher";
-import { ThemeToggle } from "./theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -108,11 +107,12 @@ export function SiteHeader({
             {restaurant.phones[0]}
           </a>
 
-          <ThemeToggle
-            label={t.common.theme}
-            labels={{ light: t.common.themeLight, dark: t.common.themeDark }}
-            className="hidden sm:flex"
-          />
+          {/* The theme toggle is hidden for now and the site is pinned dark in
+            * theme-provider.tsx. To bring it back, restore <ThemeToggle
+            * label={t.common.theme} labels={{ light: t.common.themeLight, dark:
+            * t.common.themeDark }} className="hidden sm:flex" /> here and in the
+            * mobile sheet below, and drop `forcedTheme` from the provider. The
+            * light palette and the toggle component are both still in place. */}
 
           <LocaleSwitcher locale={locale} label={t.common.language} className="hidden sm:inline-flex" />
 
@@ -176,10 +176,7 @@ export function SiteHeader({
                       label={t.common.language}
                       className="flex-1 justify-center"
                     />
-                    <ThemeToggle
-                      label={t.common.theme}
-                      labels={{ light: t.common.themeLight, dark: t.common.themeDark }}
-                    />
+                    {/* The theme toggle sat here — see the note above. */}
                   </div>
                 </div>
               </div>

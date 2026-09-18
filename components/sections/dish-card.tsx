@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Flame, Leaf, Sparkles, Star } from "lucide-react";
+import { Flame, Leaf, Sparkles, Sprout, Star } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -40,11 +40,11 @@ export function DishCard({
   variant?: "feature" | "list";
   priority?: boolean;
 }) {
-  const price = formatPrice(
-    currency === "USD" ? item.priceUSD : item.priceSYP,
-    currency,
-    locale,
-  );
+  const amount = currency === "USD" ? item.priceUSD : item.priceSYP;
+  /* The printed menu carries no prices. Rather than repeat "price on request"
+   * down the whole list, an unpriced dish simply shows no price line; the
+   * dialog says it once, where a guest has actually asked about that dish. */
+  const price = amount === undefined ? null : formatPrice(amount, currency, locale);
 
   return (
     <Dialog>
@@ -83,7 +83,7 @@ function FeatureBody({
   item: MenuItem;
   locale: Locale;
   t: Dictionary;
-  price: string;
+  price: string | null;
   priority: boolean;
 }) {
   return (
@@ -130,9 +130,11 @@ function FeatureBody({
         <p className="line-clamp-3 text-[0.92rem] leading-[1.85] text-stone-500">
           {item.description[locale]}
         </p>
-        <span className="mt-auto pt-4 font-[family-name:var(--font-display)] text-xl text-foil">
-          {price}
-        </span>
+        {price && (
+          <span className="mt-auto pt-4 font-[family-name:var(--font-display)] text-xl text-foil">
+            {price}
+          </span>
+        )}
       </div>
     </>
   );
@@ -147,7 +149,7 @@ function ListBody({
   item: MenuItem;
   locale: Locale;
   t: Dictionary;
-  price: string;
+  price: string | null;
 }) {
   return (
     <>
@@ -183,9 +185,11 @@ function ListBody({
         </div>
       </div>
 
-      <span className="shrink-0 font-[family-name:var(--font-display)] text-lg text-foil">
-        {price}
-      </span>
+      {price && (
+        <span className="shrink-0 font-[family-name:var(--font-display)] text-lg text-foil">
+          {price}
+        </span>
+      )}
     </>
   );
 }
@@ -217,6 +221,13 @@ function DishBadges({ item, t }: { item: MenuItem; t: Dictionary }) {
           {t.menu.spicyBadge}
         </Badge>
       )}
+      {/* The printed menu marks this dish seasonal; carry that through. */}
+      {item.seasonal && (
+        <Badge variant="muted">
+          <Sprout className="size-3" />
+          {t.menu.seasonalBadge}
+        </Badge>
+      )}
     </>
   );
 }
@@ -230,7 +241,7 @@ function DishDialogContent({
   item: MenuItem;
   locale: Locale;
   t: Dictionary;
-  price: string;
+  price: string | null;
 }) {
   return (
     <DialogContent closeLabel={t.common.close} className="max-w-xl p-0">
@@ -267,21 +278,23 @@ function DishDialogContent({
 
         <Ornament align="start" />
 
-        <div className="flex flex-col gap-2.5">
-          <h4 className="text-[0.7rem] uppercase tracking-luxe text-brass-400 rtl:text-[0.82rem] rtl:normal-case">
-            {t.menu.ingredients}
-          </h4>
-          <ul className="flex flex-wrap gap-2">
-            {item.ingredients[locale].map((ingredient) => (
-              <li
-                key={ingredient}
-                className="rounded-full border border-brass-500/20 bg-ink-900/60 px-3.5 py-1.5 text-[0.82rem] text-stone-400"
-              >
-                {ingredient}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {item.ingredients && (
+          <div className="flex flex-col gap-2.5">
+            <h4 className="text-[0.7rem] uppercase tracking-luxe text-brass-400 rtl:text-[0.82rem] rtl:normal-case">
+              {t.menu.ingredients}
+            </h4>
+            <ul className="flex flex-wrap gap-2">
+              {item.ingredients[locale].map((ingredient) => (
+                <li
+                  key={ingredient}
+                  className="rounded-full border border-brass-500/20 bg-ink-900/60 px-3.5 py-1.5 text-[0.82rem] text-stone-400"
+                >
+                  {ingredient}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {item.pairing && (
           <p className="text-[0.88rem] text-stone-500">
@@ -300,7 +313,7 @@ function DishDialogContent({
         <div className="mt-2 flex items-center justify-between gap-4 border-t border-brass-500/15 pt-5">
           <span className="text-[0.78rem] text-stone-600">{t.menu.priceNote}</span>
           <span className="shrink-0 font-[family-name:var(--font-display)] text-2xl text-foil">
-            {price}
+            {price ?? t.menu.priceOnRequest}
           </span>
         </div>
       </div>

@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "naranj",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-18",
+  // `nodejs_compat` is required by the Next.js runtime; the global_fetch flag
+  // makes `fetch` behave the way Next expects when it strips the URL origin.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

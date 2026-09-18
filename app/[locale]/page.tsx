@@ -10,6 +10,7 @@ import { PressSection } from "@/components/sections/press-section";
 import { SweetsSection } from "@/components/sections/sweets-section";
 import { EventsSection } from "@/components/sections/events-section";
 import { BrandsSection } from "@/components/sections/brands-section";
+import { BranchesSection } from "@/components/sections/branches-section";
 import { FaqSection } from "@/components/sections/faq-section";
 import { ReserveBand } from "@/components/sections/reserve-band";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -61,6 +62,7 @@ export default async function HomePage({
 
       <SweetsSection locale={locale} t={t} />
       <PressSection locale={locale} t={t} />
+      <BranchesSection locale={locale} t={t} />
       <EventsSection locale={locale} t={t} compact />
       <BrandsSection locale={locale} t={t} />
       <FaqSection locale={locale} t={t} />

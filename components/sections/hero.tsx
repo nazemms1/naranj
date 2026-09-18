@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, Clock, MapPin } from "lucide-react";
+import { Clock, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { reservationHref } from "@/lib/nav";
@@ -14,140 +14,182 @@ import type { Locale } from "@/lib/i18n/config";
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
- * The opening frame is the restaurant's own facade at night — the lit sign
- * over the ablaq stone. The type sits against the darker side of that
- * photograph, which is where the image leaves room for it.
+ * The opening frame is a spread, not a poster: the type holds one column and a
+ * photograph of the courtyard holds the other, cut to the two-centred pointed
+ * arch the house is actually built from.
+ *
+ * The photograph is used at its native size inside that arch rather than
+ * stretched edge to edge — a full-bleed hero would have to upscale it, and the
+ * softness is exactly what made the old opening look printed from nothing.
  */
 export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
   const reduced = useReducedMotion();
   const { scrollY } = useScroll();
-  const imageY = useTransform(scrollY, [0, 900], [0, 170]);
-  const copyY = useTransform(scrollY, [0, 900], [0, 60]);
-  const fade = useTransform(scrollY, [0, 520], [1, 0]);
+  const archY = useTransform(scrollY, [0, 900], [0, -70]);
+  const copyY = useTransform(scrollY, [0, 900], [0, 48]);
 
   const address = restaurant.address[locale];
 
   return (
-    <section className="grain relative flex min-h-[100svh] items-center overflow-hidden">
-      <motion.div
-        style={reduced ? undefined : { y: imageY }}
-        className="absolute inset-0 -top-20 h-[calc(100%+5rem)]"
-      >
-        {/*
-          Two frames of the same building. The night facade carries the dark
-          theme; the daylight hall carries the light one. Both ship, and CSS
-          picks — so the switch is instant and neither is a crop of the other.
-        */}
+    <section className="grain relative flex min-h-[100svh] items-center overflow-hidden bg-ink-950">
+      {/* The dining gallery, held far back so it reads as depth, not wallpaper */}
+      <div className="absolute inset-0">
         <Image
-          src="/images/facade-night.jpg"
+          src="/images/hall-mood.jpg"
           alt=""
           fill
           priority
           sizes="100vw"
-          quality={92}
-          className="scale-[1.06] object-cover object-[62%_center] light:opacity-0 lg:object-center"
+          quality={80}
+          className="object-cover object-center opacity-[0.16] light:opacity-[0.1]"
         />
-        <Image
-          src="/images/hall-day.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          quality={92}
-          className="scale-[1.06] object-cover object-center opacity-0 light:opacity-100"
-        />
-      </motion.div>
+        <div className="absolute inset-0 bg-mashrabiya opacity-[0.05]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink-950 via-ink-950/75 to-ink-950" />
+      </div>
 
-      {/* Scrims: heavier behind the copy, lighter over the sign */}
-      <div className="scrim-b absolute inset-0" />
-      <div className="scrim-inline absolute inset-0" />
-
-      {/* Ablaq banding along the bottom edge, echoing the stone in the photo */}
+      {/* Ablaq banding along the bottom edge, echoing the stone of the house */}
       <div className="ablaq-rule absolute inset-x-0 bottom-0 z-10 opacity-40" />
 
-      <motion.div
-        style={reduced ? undefined : { y: copyY, opacity: fade }}
-        className="container-luxe relative z-10 flex flex-col items-start pt-28 text-start"
-      >
-        <motion.span
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2, ease: EASE }}
-          className="flex items-center gap-3 text-[0.7rem] font-medium uppercase tracking-luxe text-brass-400 rtl:text-[0.88rem] rtl:normal-case"
-        >
-          <span className="h-px w-8 bg-brass-500" />
-          {t.hero.eyebrow}
-        </motion.span>
-
-        <h1 className="mt-7 max-w-3xl text-balance text-[2.75rem] leading-[1.05] text-ivory-50 sm:text-6xl lg:text-[4.5rem] rtl:leading-[1.3]">
-          <HeroLine delay={0.32}>{t.hero.titleLine1}</HeroLine>{" "}
-          <HeroLine delay={0.44}>
-            <em className="text-foil not-italic">{t.hero.titleAccent}</em>
-          </HeroLine>
-          <br />
-          <HeroLine delay={0.56}>
-            <span className="text-ivory-200/65">{t.hero.titleLine2}</span>
-          </HeroLine>
-        </h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.95, delay: 0.85, ease: EASE }}
-          className="mt-8 max-w-xl text-pretty text-[1rem] leading-[1.95] text-ivory-200/75 sm:text-[1.06rem]"
-        >
-          {t.hero.lede}
-        </motion.p>
-
+      <div className="container-luxe relative z-10 grid items-center gap-14 py-28 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:py-20">
+        {/* ------------------------------- Type ------------------------------- */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.95, delay: 1, ease: EASE }}
-          className="mt-11 flex flex-col gap-3.5 sm:flex-row sm:gap-4"
+          style={reduced ? undefined : { y: copyY }}
+          className="flex flex-col items-start text-start"
         >
-          <Button asChild size="lg">
-            <Link href={reservationHref(locale)}>{t.hero.ctaReserve}</Link>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link href={`/${locale}/menu`}>{t.hero.ctaMenu}</Link>
-          </Button>
+          <motion.span
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: EASE }}
+            className="flex items-center gap-3 text-[0.7rem] font-medium uppercase tracking-luxe text-brass-400 rtl:text-[0.88rem] rtl:normal-case"
+          >
+            <span className="h-px w-8 bg-brass-500" />
+            {t.hero.eyebrow}
+          </motion.span>
+
+          <h1 className="mt-7 text-balance text-[2.6rem] leading-[1.05] text-ivory-50 sm:text-[3.4rem] lg:text-[4.1rem] rtl:leading-[1.3]">
+            <HeroLine delay={0.32}>{t.hero.titleLine1}</HeroLine>{" "}
+            <HeroLine delay={0.44}>
+              <em className="text-foil not-italic">{t.hero.titleAccent}</em>
+            </HeroLine>
+            <br />
+            <HeroLine delay={0.56}>
+              <span className="text-ivory-200/65">{t.hero.titleLine2}</span>
+            </HeroLine>
+          </h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.95, delay: 0.85, ease: EASE }}
+            className="mt-8 max-w-xl text-pretty text-[1rem] leading-[1.95] text-ivory-200/75 sm:text-[1.06rem]"
+          >
+            {t.hero.lede}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.95, delay: 1, ease: EASE }}
+            className="mt-11 flex flex-col gap-3.5 sm:flex-row sm:gap-4"
+          >
+            <Button asChild size="lg">
+              <Link href={reservationHref(locale)}>{t.hero.ctaReserve}</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link href={`/${locale}/menu`}>{t.hero.ctaMenu}</Link>
+            </Button>
+          </motion.div>
+
+          <motion.ul
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.3 }}
+            className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-[0.82rem] text-stone-400"
+          >
+            <li className="flex items-center gap-2">
+              <MapPin className="size-3.5 shrink-0 text-brass-500" />
+              {address.street} — {address.city}
+            </li>
+            <li className="flex items-center gap-2">
+              <Clock className="size-3.5 shrink-0 text-brass-500" />
+              {t.contact.hoursValue}
+            </li>
+          </motion.ul>
         </motion.div>
 
-        <motion.ul
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.3 }}
-          className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 text-[0.82rem] text-stone-400"
+        {/* ------------------------------- Arch ------------------------------- */}
+        <motion.figure
+          style={reduced ? undefined : { y: archY }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.4, delay: 0.5, ease: EASE }}
+          className="relative mx-auto w-full max-w-[min(27rem,54svh)] lg:mx-0 lg:ms-auto"
         >
-          <li className="flex items-center gap-2">
-            <MapPin className="size-3.5 shrink-0 text-brass-500" />
-            {address.street} — {address.city}
-          </li>
-          <li className="flex items-center gap-2">
-            <Clock className="size-3.5 shrink-0 text-brass-500" />
-            {t.contact.hoursValue}
-          </li>
-        </motion.ul>
-      </motion.div>
+          <ArchClip />
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.7, duration: 1 }}
-        style={reduced ? undefined : { opacity: fade }}
-        className="absolute inset-x-0 bottom-9 z-10 flex flex-col items-center gap-2.5"
-      >
-        <span className="text-[0.6rem] uppercase tracking-luxe text-stone-500 rtl:text-[0.74rem] rtl:normal-case">
-          {t.hero.scrollHint}
-        </span>
-        <motion.span
-          animate={reduced ? undefined : { y: [0, 7, 0] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          className="text-brass-500"
-        >
-          <ArrowDown className="size-4" />
-        </motion.span>
-      </motion.div>
+          {/* Brass hairline repeating the arch, set a hair outside the photo */}
+          <svg
+            viewBox="0 0 400 560"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-[7px] h-[calc(100%+14px)] w-[calc(100%+14px)]"
+          >
+            <path
+              d={ARCH_PATH}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              vectorEffect="non-scaling-stroke"
+              className="text-brass-500/45"
+            />
+          </svg>
+
+          <div
+            className="relative aspect-[400/560] w-full overflow-hidden bg-ink-900"
+            style={{ clipPath: "url(#naranj-arch)" }}
+          >
+            <Image
+              src="/images/courtyard-night.jpg"
+              alt={t.hero.imageAlt}
+              fill
+              priority
+              sizes="(max-width: 1024px) 88vw, 26rem"
+              quality={90}
+              className="object-cover object-[center_46%]"
+            />
+            {/* Just enough scrim at the foot to seat the caption */}
+            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink-950/85 to-transparent" />
+          </div>
+
+          <figcaption className="absolute inset-x-0 bottom-6 z-10 text-center text-[0.72rem] uppercase tracking-luxe text-ivory-200/80 rtl:text-[0.86rem] rtl:normal-case">
+            {t.hero.imageCaption}
+          </figcaption>
+        </motion.figure>
+      </div>
     </section>
+  );
+}
+
+/* --------------------------------------------------------------------------
+ * A two-centred pointed arch — the qaws the house's own windows are built on.
+ * Kept in objectBoundingBox units so one definition fits the panel at any size.
+ * -------------------------------------------------------------------------- */
+
+const ARCH_PATH =
+  "M 0 560 L 0 250 A 181 181 0 0 1 200 70 A 181 181 0 0 1 400 250 L 400 560 Z";
+
+const ARCH_PATH_UNIT =
+  "M 0 1 L 0 0.4464 A 0.4525 0.3232 0 0 1 0.5 0.125 A 0.4525 0.3232 0 0 1 1 0.4464 L 1 1 Z";
+
+function ArchClip() {
+  return (
+    <svg aria-hidden="true" className="absolute size-0">
+      <defs>
+        <clipPath id="naranj-arch" clipPathUnits="objectBoundingBox">
+          <path d={ARCH_PATH_UNIT} />
+        </clipPath>
+      </defs>
+    </svg>
   );
 }
 

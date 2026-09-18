@@ -62,7 +62,9 @@ export const credentials: {
   label: Record<Locale, string>;
 }[] = [
   { id: "since", value: "2007", label: { ar: "على الشارع المستقيم", en: "on Straight Street" } },
-  { id: "cities", value: "6", label: { ar: "مدن يحضر فيها نارنج", en: "cities serving Naranj" } },
+  /* Counted from content/branches.ts — only cities the operator itself names
+   * as Naranj branches, not the group's full city list. */
+  { id: "cities", value: "4", label: { ar: "مدن يحضر فيها نارنج", en: "cities serving Naranj" } },
   { id: "hours", value: "15h", label: { ar: "يومياً بلا إغلاق", en: "open daily, no break" } },
   { id: "group", value: "1998", label: { ar: "تأسيس مجموعة جيميني", en: "Gemini Group founded" } },
 ];

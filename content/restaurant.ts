@@ -64,11 +64,22 @@ export const restaurant = {
     en: ["Syrian", "Levantine", "Middle Eastern", "Mediterranean"],
   },
 
-  /** SOURCE: Facebook page (Sep 2026) — treat as a snapshot, not a live feed. */
+  /**
+   * SOURCE: Instagram bio of the official account @naranj.sy, read Sep 2026.
+   * The Arabic is the account's own line, verbatim.
+   */
+  tagline: {
+    ar: "التجربة السورية الشرقية الأصيلة",
+    en: "The authentic Syrian Oriental experience",
+  },
+
+  /** SOURCE: Facebook page + Instagram @naranj.sy (Sep 2026) — a snapshot, not a live feed. */
   social: {
     facebook: "https://www.facebook.com/NaranjSyr",
     facebookFollowers: 61000,
-    instagram: "https://www.instagram.com/naranj.damascus",
+    /** SOURCE: confirmed by the owner — the official account is @naranj.sy. */
+    instagram: "https://www.instagram.com/naranj.sy/",
+    instagramFollowers: 25700,
     tripadvisor:
       "https://www.tripadvisor.com/Restaurant_Review-g294011-d1526685-Reviews-Naranj_Restaurant-Damascus.html",
     recommendRate: 94,

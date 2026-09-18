@@ -8,7 +8,9 @@
  */
 const fs = require("fs");
 
-const css = fs.readFileSync("app/globals.css", "utf8");
+/* Newlines are normalised because the selectors below span two lines, and a
+ * checkout with core.autocrlf=true (the Windows default) hands us CRLF. */
+const css = fs.readFileSync("app/globals.css", "utf8").replace(/\r\n/g, "\n");
 
 /** Pulls the `--c-*` declarations out of one theme block. */
 function readTheme(selector) {

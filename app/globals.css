@@ -390,11 +390,12 @@
   .container-luxe {
     width: 100%;
     margin-inline: auto;
-    max-width: 84rem;
+    max-width: 96rem;
     padding-inline: 1.25rem;
   }
   @media (min-width: 768px) { .container-luxe { padding-inline: 2rem; } }
   @media (min-width: 1280px) { .container-luxe { padding-inline: 3.5rem; } }
+  @media (min-width: 1600px) { .container-luxe { padding-inline: 5rem; } }
 
   .section-y { padding-block: 5.5rem; }
   @media (min-width: 768px) { .section-y { padding-block: 7.5rem; } }

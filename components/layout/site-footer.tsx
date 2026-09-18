@@ -116,6 +116,15 @@ export function SiteFooter({ locale, t }: { locale: Locale; t: Dictionary }) {
             </a>
           </p>
         </div>
+
+        {/* Build credit, centred under the legal line in both directions. The
+          * name itself stays Latin and LTR whichever way the page runs. */}
+        <p className="mt-8 text-center text-[0.76rem] text-stone-600">
+          {t.footer.developedBy}{" "}
+          <span dir="ltr" className="text-brass-600">
+            Eng. Nazem Almsouti
+          </span>
+        </p>
       </div>
     </footer>
   );
